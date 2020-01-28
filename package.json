@@ -12,7 +12,7 @@
   "author": "Luisi Kravchenko",
   "license": "ISC",
   "engines": {
-    "node": "12.x"
+    "node": "12.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
