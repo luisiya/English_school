@@ -1,15 +1,21 @@
+body {
+    background-image:url(./images/abc-2.png);
+    background-size: 881px;
+    background-repeat: no-repeat;
+    background-position: top;
+}
+
 .App {
-    background-image:url(./images/abc.png);
     text-align: center;
     max-width: 960px;
     margin: 8% auto;
     height: 499px;
-    background-size: 881px;
-    background-repeat: no-repeat;
-    background-position: top;
     padding-top: 145px;
 }
-
+.update_bg{
+    background-image:url(./images/abc.png);
+    background-position-y: center;
+}
 
 
 
