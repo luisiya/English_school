@@ -1,0 +1,19 @@
+/* Responsive styles for the application */
+.task-button {
+  width: 26%;
+  margin: 0 auto;
+  color: #009688;
+  padding: 10px;
+  border: 1px solid #009688;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+@media (max-width: 479px) {
+  .task-button {
+    width: 40%;
+    text-align: left;
+  }
+}

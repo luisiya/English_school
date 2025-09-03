@@ -1,27 +1,30 @@
 ﻿const HtmlWebPackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
+  entry: './src/index.js',
   output: {
-    filename: isDevelopment ? '[name].js' : '[name].[hash].js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: isDevelopment ? '[name].js' : '[name].[contenthash].js',
+    clean: true,
   },
   devServer: {
     compress: true,
-    // Enable hot reloading
     hot: true,
-    port: process.env.PORT,
-    // Public path is root of content base
-    publicPath: '/',
-
+    port: process.env.PORT || 8080,
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    historyApiFallback: true,
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /(node_modules|idea|bower_components)/,
+        test: /\.(js|jsx|mjs)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
         },
@@ -32,37 +35,18 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: 'svg-url-loader',
+        type: 'asset/inline',
       },
       {
-        test: /\.(jpg|png)$/,
-        use: {
-          loader: 'url-loader',
+        test: /\.(jpg|png|gif|ico|webp)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
         },
       },
       {
-        test: /\.scss$/,
-        use: [
-          { loader: 'style-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              camelCase: true,
-              localIdentName: '[name]__[local]',
-            },
-          },
-          { loader: 'postcss-loader' },
-          { loader: 'sass-loader', options: { sourceMap: true } },
-        ],
-      },
-      {
         test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-        ],
+        use: ['html-loader'],
       },
     ],
   },
@@ -71,6 +55,20 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
     }),
-    new CleanWebpackPlugin(),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.mjs'],
+    fallback: {
+      "http": false,
+      "https": false,
+      "util": false,
+      "zlib": false,
+      "stream": false,
+      "url": false,
+      "assert": false,
+    },
+  },
+  experiments: {
+    topLevelAwait: true,
+  },
 };

@@ -1,5 +1,4 @@
 import { Provider } from 'react-redux';
-import React from 'react';
 import { UnitsWrapper } from './components/UnitsWrapper';
 import './App.css';
 import store from './store';

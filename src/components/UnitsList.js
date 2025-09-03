@@ -1,31 +1,32 @@
-import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core';
+import { Fragment, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Task } from './Task';
 import { Unit } from './Unit';
+import { getTasks } from '../actions';
 
-import { getTasks } from '../actions/getUnits';
+const TaskBtnBlock = ({ children }) => (
+  <div
+    style={{
+      width: '80%',
+      margin: '0 auto',
+    }}
+  >
+    {children}
+  </div>
+);
 
-const useStyles = makeStyles(() => ({
-  taskBtnBlock: {
-    width: '80%',
-    margin: '0 auto',
-  },
-}));
-
-export const UnitsList = (props) => {
-  const { tasks, getTasks } = props;
-  const classes = useStyles();
+export const UnitsList = () => {
+  const dispatch = useDispatch();
+  const tasks = useSelector(state => state.list.tasks);
+  const show = useSelector(state => state.list.show);
 
   useEffect(() => {
-    getTasks();
-  }, []);
+    dispatch(getTasks());
+  }, [dispatch]);
 
-  const show = useSelector(state => state.list.show);
   return (
     <Fragment>
-      <div className={classes.taskBtnBlock}>
+      <TaskBtnBlock>
         {show ? tasks.map(task => (
           <Unit
             key={task.id}
@@ -34,18 +35,9 @@ export const UnitsList = (props) => {
             text={task.name}
           />
         )) : <Task />}
-      </div>
+      </TaskBtnBlock>
     </Fragment>
   );
 };
 
-UnitsList.propTypes = {
-  tasks: PropTypes.array.isRequired,
-  getTasks: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  tasks: state.list.tasks,
-});
-
-export default connect(mapStateToProps, { getTasks })(UnitsList);
+export default UnitsList;

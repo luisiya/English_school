@@ -1,34 +1,50 @@
-import {GET_TASKS, MIX_WORDS, SHOW_TASKS, SET_TRANSLATES} from '../actions/types';
+import { createSlice } from '@reduxjs/toolkit';
+import { getTasks } from '../actions';
 
 const initialState = {
   tasks: [],
   show: true,
   shuffleWords: [],
+  translates: [],
+  loading: false,
+  error: null,
 };
 
-export default function (state = initialState, action) {
-  switch (action.type) {
-    case GET_TASKS:
-      return {
-        ...state,
-        tasks: action.payload,
-      };
-    case SHOW_TASKS:
-      return {
-        ...state,
-        show: !state.show,
-      };
-    case MIX_WORDS:
-      return {
-        ...state,
-        shuffleWords: action.payload,
-      };
-    case SET_TRANSLATES:
-      return {
-        ...state,
-        translates: action.payload,
-      };
-    default:
-      return state;
-  }
-}
+const tasksSlice = createSlice({
+  name: 'tasks',
+  initialState,
+  reducers: {
+    showTasks: (state) => {
+      state.show = !state.show;
+    },
+    resetToWordSets: (state) => {
+      state.show = true;
+      state.shuffleWords = [];
+      state.translates = [];
+    },
+    mixWords: (state, action) => {
+      state.shuffleWords = action.payload;
+    },
+    setTranslates: (state, action) => {
+      state.translates = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getTasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getTasks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasks = action.payload;
+      })
+      .addCase(getTasks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});
+
+export const { showTasks, mixWords, setTranslates, resetToWordSets } = tasksSlice.actions;
+export default tasksSlice.reducer;

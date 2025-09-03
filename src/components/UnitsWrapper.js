@@ -1,50 +1,62 @@
-import React, { Fragment, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import { Fragment, useState } from 'react';
 import Tasks from './UnitsList';
 
-const useStyles = makeStyles(theme => ({
-  startBtn: {
-    background: 'linear-gradient(45deg, #fe6c6c 30%, #ebff79 90%)',
-    borderRadius: 3,
-    border: 0,
-    color: 'black',
-    height: 48,
-    padding: '0 30px',
-    boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)',
-    fontSize: 'larger',
-    fontWeight: '900',
-  },
-  footer: {
-    position: 'relative',
-    bottom: '-90%',
-    fontFamily: 'monospace',
-    color: '#bbb3b3',
-  },
-}));
+const StyledButton = ({ children, ...props }) => (
+  <button
+    style={{
+      background: 'linear-gradient(45deg, #fe6c6c 30%, #ebff79 90%)',
+      borderRadius: 3,
+      border: 0,
+      color: 'black',
+      height: 48,
+      padding: '0 30px',
+      boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)',
+      fontSize: 'larger',
+      fontWeight: '900',
+      cursor: 'pointer',
+    }}
+    {...props}
+  >
+    {children}
+  </button>
+);
+
+const StyledFooter = ({ children }) => (
+  <footer
+    style={{
+      position: 'relative',
+      bottom: '-90%',
+      fontFamily: 'monospace',
+      color: '#bbb3b3',
+    }}
+  >
+    {children}
+  </footer>
+);
 
 export const UnitsWrapper = () => {
-  const classes = useStyles();
   const [isShow, setShow] = useState(false);
+  
   const show = () => {
     setShow(true);
     document.body.classList.add('update_bg');
   };
+  
   return (
     <Fragment>
-      {!isShow
-        ? (
-          <>
-            <Button className={classes.startBtn} variant="contained" onClick={show}>СТАРТ</Button>
-            <footer className={classes.footer}>© 2019-2020 Developed by Luisi Kravchenko</footer>
-          </>
-        )
-        : ''}
-      {isShow ? <Tasks /> : ''}
-
+      {!isShow && (
+        <>
+          <StyledButton onClick={show}>
+            СТАРТ
+          </StyledButton>
+          <StyledFooter>
+            © 2019-2024 Developed by Luisi Kravchenko
+          </StyledFooter>
+        </>
+      )}
+      {isShow && <Tasks />}
     </Fragment>
   );
 };
-
 
 export default UnitsWrapper;
